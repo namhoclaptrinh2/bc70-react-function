@@ -1,7 +1,7 @@
 import React from 'react'
 
 const SanPhamChiTiet = (props) => {
-    const {spChiTiet}= props;
+    const {spChiTiet}= props; //Nhan spchiTiet tu ben DanhSachSanPham
   return (
     <div className="container">
         <div className="row">

@@ -43,12 +43,31 @@ import Product from "./pages/ProductManagement/Product";
 import AntDesignDemo from "./AntDesignDemo/AntDesignDemo";
 import AntDesignTable from "./AntDesignDemo/AntDesignTable";
 import ProductManagementAntDesign from "./AntDesignDemo/ProductManagementAntDesign";
+//Cấu hình redux
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import ChangeNumberRedux from "./pages/reduxDemo/ChangeNumberRedux";
 import BtForm from "./FormDemo/BtForm";
+import ChangeFontSizeRedux from "./pages/reduxDemo/ChangeFontSizeRedux";
+// import { navigateHistory } from "./components/util/setting";
+//Cấu hình CustomBrowserHistory
+import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
+import { navigateHistory } from "./components/util/setting";
+
+//Cấu hình REACT-QUERY
+import {QueryClient,QueryClientProvider} from '@tanstack/react-query'
+//Cấu hình REACT-QUERY-DEVTOOL
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ShoesShopRQ from "./pages/ReactQueryDemo/ShoesShopRQ";
+import RQPageMaster from "./components/MasterPages/RQPageMaster";
+import UserManagementRQ from "./pages/ReactQueryDemo/UserManagementRQ";
+
+
+const queryClient=new QueryClient();
 const App = () => {
+
   return (
+
     <>
       {/* <Databinding></Databinding> */}
       {/* <DemoHandleEvent></DemoHandleEvent> */}
@@ -66,17 +85,18 @@ const App = () => {
       {/* <DanhSachSanPham></DanhSachSanPham> */}
       {/* <EXCarStore></EXCarStore> */}
       {/* <Shoes></Shoes> */}
-      <DemoLoginForm></DemoLoginForm>
+      {/* <DemoLoginForm></DemoLoginForm> */}
       {/* <DemoLoginForm_useFormik></DemoLoginForm_useFormik> */}
 
       {/* <ReMakeChangeNumber></ReMakeChangeNumber> */}
 
-      <BrowserRouter>
+      <HistoryRouter history={navigateHistory}>
         {/* <HeaderMenu></HeaderMenu> */}
         <Provider store={store}>
-        <Routes>
-          {/* <Route path='' element={<HomePage></HomePage>}></Route> */} /*cách
-          để mặc định trang chủ */
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={true} position="bottom"></ReactQueryDevtools>
+          <Routes>
+          {/* <Route path='' element={<HomePage></HomePage>}></Route> */} /*cách để mặc định trang chủ */
           {/* <Route index element={<HomePage></HomePage>}></Route>
 
         <Route path='login' element={<Login></Login>}></Route>
@@ -89,9 +109,12 @@ const App = () => {
             <Route index element={<HomePage></HomePage>}></Route>
             <Route path="antd" element={<AntDesignDemo></AntDesignDemo>}></Route>
             <Route path="login" element={<Login></Login>}></Route>
+            <Route path="register" element={<Register></Register>}></Route>
             <Route path="contact" element={<Contact></Contact>}></Route>
             <Route path="about" element={<About></About>}></Route>
             <Route path="profile" element={<Profile></Profile>}></Route>
+            <Route path="cart" element={<Cart></Cart>}></Route>
+            
             <Route path="search" element={<Search></Search>}></Route>
             <Route path='antd-table' element={<AntDesignTable />}></Route>    
             <Route path='antd-table-product' element={<ProductManagementAntDesign />}></Route>
@@ -102,6 +125,8 @@ const App = () => {
             <Outlet></Outlet>
             </>}>
               <Route path="change-number" element={<ChangeNumberRedux></ChangeNumberRedux>}></Route>
+              <Route path="change-fontsize" element={<ChangeFontSizeRedux></ChangeFontSizeRedux>}></Route>
+
             </Route>
 
             <Route path="detail">
@@ -109,6 +134,7 @@ const App = () => {
             </Route>
             <Route path="*" element={<Page404></Page404>}></Route>
           </Route>
+
           <Route path="user" element={<UserPageMaster></UserPageMaster>}>  /*http://localhost:5173/user */
             <Route path="login" element={<Login></Login>}></Route>
             <Route path="register" element={<Register></Register>}></Route>
@@ -131,12 +157,20 @@ const App = () => {
           <Route path='productmanagement' element={<ProductManagement />}></Route>
           <Route path='*' element={<Page404 />} />
 
-        </Route>
+          </Route>
 
+          <Route path="react-query" element={<RQPageMaster></RQPageMaster>}>
+              <Route path="useClient-demo" element={<ShoesShopRQ></ShoesShopRQ>}>
+              </Route>
+
+              <Route path="usermutaion-queryclient-demo" element={<UserManagementRQ></UserManagementRQ>}></Route>
+          </Route>
           
         </Routes>
+          </QueryClientProvider>
+        
         </Provider>
-      </BrowserRouter>
+      </HistoryRouter>
     </>
   );
 };

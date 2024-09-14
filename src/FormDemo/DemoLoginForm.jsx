@@ -55,8 +55,9 @@ const DemoLoginForm = () => {
                     const regexPhone = /^(0[1-9]{1}[0-9]{8}|(84|0)(9[0-9]|8[1-9]|7[0-9]|6[2-9]|5[0-9]|4[0-9]|3[2-9]|2[0-9]|1[0-9])[0-9]{7})$/;
                     if(!regexPhone.test(value)){
                         messError = `${name} is invalid (ex: 0909090909)`
-                    }break;
-                }
+                    }
+                };break;
+                
             }
             
         }

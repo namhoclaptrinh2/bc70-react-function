@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { NavLink, useParams } from 'react-router-dom'
+import { NavLink, useNavigate, useParams } from 'react-router-dom'
+import { http } from '../components/util/setting';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProductDetailByIdActionThunk } from './reduxDemo/productReducer';
 
 const Detail = () => {
-    const [prodDetail,setProdDetail] = useState({}); //useState là hook
+    // const [prodDetail,setProdDetail] = useState({}); //useState là hook
+    const {prodDetail} = useSelector(state=>state.productReducer)
+    const dispatch = useDispatch();
     const [transformValue, setTransformValue] = useState('roate(0deg)')
+    // const navigate = useNavigate();
     const param = useParams();
     console.log(param)
 
     const getProductId = async () => {
-        const res = await fetch (`https://apistore.cybersoft.edu.vn/api/Product/getbyid?id=${param.proId}`);
-        const jsonRes = await res.json();
-
-        console.log(jsonRes.content)
-        //setState sau khi lấy dữ liệu api về
-        setProdDetail(jsonRes.content)
+        
+        //Tạo ra action thunk ( là 1 hàm có tham số là dispatch)
+        const actionThunk = getProductDetailByIdActionThunk(param.proId);
+        dispatch(actionThunk);
     }
     useEffect(()=>{
         //Gọi khi html load xong

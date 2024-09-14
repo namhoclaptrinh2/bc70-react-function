@@ -1,43 +1,53 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { handleChangeInputAction } from './reduxDemo/userReducer';
-import axios from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import React, { useState } from 'react'
+
 import { useNavigate } from 'react-router-dom';
+import { registerApi } from '../../api/userApi';
 
-const Register = () => {
-  const {userRegister} = useSelector(state => state.userReducer);
-  const navigate = useNavigate()
-  const dispatch = useDispatch();
+const RegisterFormRQ = () => {
 
-  console.log(userRegister)
+    const queryClient =useQueryClient();
+    const [userRegister, setUserRegister] = useState({
+        id:'',
+        name:'',
+        phone:'',
+        gender:true,
+        email:''
+    })
 
+
+    const mutaiton = useMutation({
+        mutationKey:['registerUser'],
+        mutationFn:registerApi,
+        onSuccess:(data) => {
+        console.log('data',data)
+                //Thành công
+                queryClient.invalidateQueries('getAllUser');
+        },
+         onError:(err) => {
+                //Thất bại
+        }
+
+    })
   const handleChangeInput =(e)=>{
     let {id,value}=e.target;
-    //Tạo action payload để đưa dữ liệu lên redux
-    // const action = {
-    //   type:'userReducer/handleChangeInputAction',
-    //   payload: {
-    //     id:id,
-    //     value:value
-    //   }
-    const action = handleChangeInputAction({id,value});
-    dispatch(action)
-    console.log('action', action)
+        setUserRegister({...userRegister,
+        [id]:value
+        })
+   
 
     
   }
   const handleSubmit =async  (e) => {
     e.preventDefault();
-    // console.log(userRegister);
-    //Gọi api đăng ký:
-    try{
-      const res = await axios.post('https://apistore.cybersoft.edu.vn/api/Users/signup',userRegister)
-      alert('Đăng ký thành công')
-      navigate('/profile');
-      
-    }catch(err){
-      console.log(err)
-    }
+    console.log(userRegister)
+
+    //Sau khi submit sẽ gọi api  = mutation
+
+    mutaiton.mutateAsync(userRegister)
+
+
+
 
   }
 
@@ -85,4 +95,4 @@ const Register = () => {
     </div>  )
 }
 
-export default Register
+export default RegisterFormRQ

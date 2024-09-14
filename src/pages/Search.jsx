@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { NavLink, useSearchParams } from 'react-router-dom';
+import { http } from '../components/util/setting';
 
 const Search = () => {
   const [tuKhoa, setTuKhoa] = useState('');
@@ -12,7 +13,7 @@ const Search = () => {
    
     if(valueKeyword) {
       //Gọi api
-      const res = await fetch(`https://apistore.cybersoft.edu.vn/api/Product?keyword=${valueKeyword}`);
+      const res = await http.get(`https://apistore.cybersoft.edu.vn/api/Product?keyword=${valueKeyword}`);
 
       const data = await res.json();
       console.log('arrProduct',data.content);

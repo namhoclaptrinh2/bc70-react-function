@@ -156,7 +156,8 @@ const thayDoiSoLuong = (maSPClick,soLuong) => { // maSP , 1 hoặc -1
         </div> */}
       </div>
       <h3 className="mt-4"></h3>
-      <SanPhamChiTiet spChiTiet={spChiTiet}></SanPhamChiTiet>
+      <SanPhamChiTiet spChiTiet={spChiTiet}  /*spChiTiet truyeenf qua been SanPhamChiTiet */ ></SanPhamChiTiet>
+      {/* spChiTiet là dùng để truyền props va SanPhamChiTiet */}
     </div>
   );
 };

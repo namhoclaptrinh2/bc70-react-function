@@ -1,9 +1,56 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
+import { deleteCookie, TOKEN, USER_LOGIN } from "./util/setting";
 
 const HeaderMenu = () => {
+
+  const cartStore = useSelector(state => state.cartSliceReducer.cart);
+
+  const {userLogin} =useSelector(state => state.userReducer);
+
+  const navigate=useNavigate()
+
+  const renderLogin = () => {
+      if(userLogin) {
+        return <>
+          <NavLink
+        to="/profile"
+        className={(props) =>
+          props.isActive
+            ? "mx-2 bg-white text-dark p-3 text-decoration-none"
+            : "mx-2 text-white link"
+        }
+        style={(props) => (props.isActive ? { fontWeight: "bold" } : {})}
+      >
+        Hello !{userLogin.email}
+      </NavLink>
+
+      <NavLink className={'mx-2 text-white link'} onClick={()=>{
+                deleteCookie(TOKEN);
+                localStorage.removeItem(TOKEN);
+                localStorage.removeItem(USER_LOGIN);
+                navigate('/login');
+                window.location.reload();
+            }}>Đăng xuất</NavLink>
+        </>
+        
+      }
+      return         <NavLink
+      to="/login"
+      className={(props) =>
+        props.isActive
+          ? "mx-2 bg-white text-dark p-3 text-decoration-none"
+          : "mx-2 text-white link"
+      }
+      style={(props) => (props.isActive ? { fontWeight: "bold" } : {})}
+    >
+      Login
+    </NavLink>
+  }
   return (
     <header className="bg-dark text-white">
+      <div className='d-flex justify-content-between'>
       <nav className="p-2">
         <NavLink
           to="/"
@@ -15,7 +62,8 @@ const HeaderMenu = () => {
         >
           Home
         </NavLink>
-        <NavLink
+
+        {/* <NavLink
           to="/login"
           className={(props) =>
             props.isActive
@@ -25,7 +73,19 @@ const HeaderMenu = () => {
           style={(props) => (props.isActive ? { fontWeight: "bold" } : {})}
         >
           Login
-        </NavLink>
+        </NavLink> */} {renderLogin()}
+
+        <NavLink
+          to="/register"
+          className={(props) =>
+            props.isActive
+              ? "mx-2 bg-white text-dark p-3 text-decoration-none"
+              : "mx-2 text-white link"
+          }
+          style={(props) => (props.isActive ? { fontWeight: "bold" } : {})}
+        >
+          Register
+        </NavLink>        
         <NavLink
           to="/user/login"
           className={(props) =>
@@ -135,9 +195,16 @@ const HeaderMenu = () => {
                 Change number{" "}
               </NavLink>
             </li>
+            <li> <NavLink className="dropdown-item" to="/redux/change-fontsize"> Change font size </NavLink></li>
+
           </ul>
         </div>
       </nav>
+      <NavLink to='/cart' className={(props) => props.isActive ? 'mx-2 bg-white text-dark p-3 text-decoration-none' : 'mx-2 text-white link'}>
+                    <i className='fa fa-cart-plus fs-2'></i>  ({cartStore.length})
+                </NavLink>
+      </div>
+      
     </header>
   );
 };
